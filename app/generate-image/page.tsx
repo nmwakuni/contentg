@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import API_BASE_URL from '../components/baseurl';
-import Image from 'next/image';
 
 export default function GenerateImage() {
   const [imageFormData, setImageFormData] = useState({
