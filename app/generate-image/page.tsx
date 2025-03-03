@@ -50,15 +50,10 @@ export default function GenerateImage() {
     try {
       const baseUrl = 'https://image.pollinations.ai/prompt/';
       const encodedPrompt = encodeURIComponent(imageFormData.prompt);
-      const params = new URLSearchParams({
-        width: imageFormData.width.toString(),
-        height: imageFormData.height.toString(),
-        seed: Date.now().toString(),
-      });
-
-      const directImageUrl = `${baseUrl}${encodedPrompt}?${params.toString()}`;
+      const directImageUrl = `${baseUrl}${encodedPrompt}`;
       setImageUrl(directImageUrl);
 
+      // Store in backend
       await fetch(`${API_BASE_URL}/content/generate-image`, {
         method: 'POST',
         headers: {
@@ -72,13 +67,13 @@ export default function GenerateImage() {
 
     } catch (err) {
       console.error('Error:', err);
-      setImageError(err instanceof Error ? err.message : 'An error occurred during image generation');
+      setImageError('Failed to generate image. Please try again.');
     } finally {
       setImageLoading(false);
     }
   };
 
-  // Update the model options
+  // Replace the Image component with regular img tag
   return (
     <div className="min-h-screen p-8 bg-gray-50 dark:bg-gray-900">
       <main className="max-w-4xl mx-auto">
@@ -173,10 +168,10 @@ export default function GenerateImage() {
           <div className="mt-6 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
             <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Generated Image:</h2>
             <div className="relative aspect-square w-full">
-              <Image
+              <img
                 src={imageUrl}
                 alt="Generated"
-                className="rounded-lg w-full"
+                className="rounded-lg w-full h-full object-contain"
               />
             </div>
             <button
